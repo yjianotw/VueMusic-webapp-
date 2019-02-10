@@ -1,29 +1,56 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
+    <the-player></the-player>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import Player from "@/components/player/Player";
+export default {
+  components: {
+    "the-player": Player
+  },
+  created() {
+    this.storeTolocalStorage();
+  },
+  methods: {
+    /**
+     * 在根页面被创建时调用，将vuex中的状态和数据存到localStorage中
+     * 刷新页面时，再将localStorage中的状态和数据赋给vuex，解决刷新后数据丢失的问题
+     */
+    storeTolocalStorage() {
+      let that = this;
+      localStorage.getItem("vueMusicStore") &&
+        that.$store.replaceState(
+          Object.assign(
+            that.$store.state,
+            JSON.parse(localStorage.getItem("vueMusicStore"))
+          )
+        );
+      window.addEventListener("beforeunload", () => {
+        that.$store.commit("CURRENT_NAV", 0);
+        that.$store.commit("SHOW_PLAYER", false);
+        that.$store.commit("IS_PLAYING", false);
+        that.$store.commit("KEY_WORDS", "");
+        localStorage.setItem(
+          "vueMusicStore",
+          JSON.stringify(that.$store.state)
+        );
+      });
     }
   }
+};
+</script>
+
+<style lang="scss">
+@import "@/scss/normalize.scss";
+@import "@/scss/custom.scss";
+#app {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

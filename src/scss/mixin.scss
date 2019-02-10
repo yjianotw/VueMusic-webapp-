@@ -1,0 +1,79 @@
+// flex布局等间距并垂直居中
+@mixin flex-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// header样式
+@mixin header-style {
+    position: fixed;
+    top: 0;
+    padding: 0 4%;
+    width: 92%;
+    height: 45px;
+    @include flex-center;
+    background: #d83f36;
+}
+
+// 0.5px分割线效果
+@mixin split-line($color) {
+    position: relative;
+    &::before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        bottom: 0; //线的位置：底部
+        right: 0;
+        height: 1px; // border-top: 1px solid #D9D9D9;
+        border-top: 1px solid $color;
+        color: $color;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: scaleY(0.5);
+        transform: scaleY(0.5);
+    }
+}
+
+// 页面切换左右动画效果
+@mixin fade-lr {
+    .fade-enter-active {
+        transform: translateX(0);
+        transition: all 0.4s ease;
+    }
+    .fade-leave-active {
+        transform: translateX(100%);
+        transition: all 0.4s ease;
+    }
+    .fade-enter {
+        transform: translateX(100%);
+    }
+    .fade-leave {
+        transform: translateX(0);
+    }
+}
+
+// tab自底向上动画效果
+@mixin fade-b2t {
+    .bottom-enter-active {
+        transform: translateY(0);
+        transition: all 0.2s ease;
+    }
+    .bottom-leave-active {
+        transform: translateY(100%);
+        transition: all 0.2s ease;
+    }
+    .bottom-enter {
+        transform: translateY(100%);
+    }
+    .bottom-leave {
+        transform: translateY(0);
+    }
+}
+
+// 文字溢出隐藏
+@mixin textoverflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
